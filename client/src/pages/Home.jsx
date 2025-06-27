@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import API from '../services/api';
 import { Link } from 'react-router-dom';
+import { usePosts } from '../hooks/usePosts';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { posts, loading, error } = usePosts();
 
   useEffect(() => {
     API.get('/posts')
