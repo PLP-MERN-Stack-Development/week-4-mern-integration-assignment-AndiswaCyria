@@ -27,6 +27,16 @@ export default function CreatePost() {
       .catch(console.error);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try{
+      await postService.createPost(form);
+      navigate('/');
+    } catch (error) {
+      alert('Failed to create post:' + error.message);
+    }
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Create New Post</h2>
@@ -37,8 +47,10 @@ export default function CreatePost() {
           onChange={handleChange}
           placeholder="Title"
           required
-          className="w-full border p-2"
+          className={`w-full border p-2 ${!form.title && 'border-red-500'}`}
         />
+        {!form.title && <p className="text-red-500 text-sm">Title is required</p>}
+        
         <textarea
           name="content"
           value={form.content}
