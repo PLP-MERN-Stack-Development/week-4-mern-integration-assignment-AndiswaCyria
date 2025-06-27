@@ -1,26 +1,17 @@
-import { useEffect, useState } from 'react';
-import API from '../services/api';
 import { Link } from 'react-router-dom';
 import { usePosts } from '../hooks/usePosts';
 
 export default function Home() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { posts, loading, error } = usePosts();
-
-  useEffect(() => {
-    API.get('/posts')
-      .then((res) => setPosts(res.data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
 
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">All Posts</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : posts.length ? (
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {!loading && posts.length > 0 ? (
         <ul className="space-y-4">
           {posts.map((post) => (
             <li key={post._id} className="border p-4 rounded bg-white shadow">
@@ -33,7 +24,7 @@ export default function Home() {
           ))}
         </ul>
       ) : (
-        <p>No posts available.</p>
+        !loading && <p>No posts available.</p>
       )}
     </div>
   );
