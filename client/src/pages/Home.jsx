@@ -1,32 +1,37 @@
+import { useEffect, useState } from 'react';
+import { postService } from '../services/api';
 import { Link } from 'react-router-dom';
-import { usePosts } from '../hooks/usePosts';
 
 export default function Home() {
-  const { posts, loading, error } = usePosts();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    postService.getAllPosts().then(setPosts).catch(console.error);
+  }, []);
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">All Posts</h2>
-
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {!loading && posts.length > 0 ? (
-        <ul className="space-y-4">
-          {posts.map((post) => (
-            <li key={post._id} className="border p-4 rounded bg-white shadow">
-              <h3 className="text-lg font-semibold">{post.title}</h3>
-              <p>{post.content.substring(0, 100)}...</p>
-              <Link to={`/posts/${post._id}`} className="text-blue-600 hover:underline">
-                Read More
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        !loading && <p>No posts available.</p>
-      )}
+      <h1 className="text-2xl font-bold mb-4">All Posts</h1>
+      <Link
+        to="/create"
+        className="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Create New Post
+      </Link>
+      <ul className="space-y-4">
+        {posts.map((post) => (
+          <li key={post._id} className="bg-white p-4 rounded shadow">
+            <h2 className="text-xl font-semibold">{post.title}</h2>
+            <p>{post.content.slice(0, 100)}...</p>
+            <Link
+              to={`/posts/${post._id}`}
+              className="text-blue-600 hover:underline"
+            >
+              Read More
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
-

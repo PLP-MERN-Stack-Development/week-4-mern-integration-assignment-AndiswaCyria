@@ -1,22 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import SinglePost from './pages/SinglePost';
-import CreatePost from './pages/CreatePost';
-import Navbar from './components/Navbar';
+import Post from './pages/Post'; // import Post page
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts/:id" element={<SinglePost />} />
-          <Route path="/create" element={<CreatePost />} />
-        </Routes>
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/posts/:id" element={<Post />} />  {/* Add this */}
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
+

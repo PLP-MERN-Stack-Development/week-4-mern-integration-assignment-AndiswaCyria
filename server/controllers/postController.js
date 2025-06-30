@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const Category = require('../models/Category');
+const slugify = require('slugify');
 
 // Get all posts
 exports.getAllPosts = async (req, res, next) => {
@@ -25,16 +26,30 @@ exports.getPostById = async (req, res, next) => {
 // Create a post
 exports.createPost = async (req, res, next) => {
   try {
-    const { title, content, category, author, image } = req.body;
+    const { title, content, category } = req.body;
 
-    const newPost = new Post({ title, content, category, author, image });
+    if (!title || !content || !category) {
+      return res.status(400).json({ message: 'Title, content, and category are required' });
+    }
+
+    const slug = slugify(title, { lower: true, strict: true });
+
+    const newPost = new Post({
+      title,
+      content,
+      category,
+      author: req.user._id, // comes from auth middleware
+      slug,
+    });
+
     await newPost.save();
 
     res.status(201).json(newPost);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
+
 
 // Update post
 exports.updatePost = async (req, res, next) => {
