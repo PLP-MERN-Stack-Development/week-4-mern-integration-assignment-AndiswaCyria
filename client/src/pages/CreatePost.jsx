@@ -1,53 +1,71 @@
-import { useState } from 'react';
-import { postService } from '../services/api';
-import CategoryDropdown from '../components/CategoryDropdown';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
 
-export default function CreatePost() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const navigate = useNavigate();
+const CreatePost = () => {
+  const [form, setForm] = useState({
+    title: "",
+    category: "",
+    content: "",
+  });
 
-  const handleSubmit = async (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await postService.createPost({
-        title,
-        content,
-        category: categoryId,
-      });
-      navigate('/');
-    } catch (error) {
-      alert(error.response?.data?.error || 'Failed to create post');
-    }
+    console.log("Post submitted:", form);
+    // You’ll replace this with an API call (e.g., axios.post)
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Create Post</h1>
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Create a New Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          className="w-full p-2 border rounded"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Content"
-          className="w-full p-2 border rounded"
-          rows={6}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        ></textarea>
-        <CategoryDropdown value={categoryId} onChange={(e) => setCategoryId(e.target.value)} />
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-          Submit
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Category</label>
+          <input
+            type="text"
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Content</label>
+          <textarea
+            name="content"
+            value={form.content}
+            onChange={handleChange}
+            rows="6"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Publish Post
         </button>
       </form>
     </div>
   );
-}
+};
+
+export default CreatePost;

@@ -1,14 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+
+import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Post from './pages/Post'; // import Post page
+import CreatePost from './pages/CreatePost';
+import PostDetail from './pages/PostDetail';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/posts/:id" element={<Post />} />  {/* Add this */}
-      </Routes>
+      <Navbar />
+      <main className="container mx-auto px-4 py-6">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create" element={<CreatePost />} />
+          <Route path="/posts/:id" element={<PostDetail />} />
+        </Routes>
+      </main>
     </Router>
   );
 }

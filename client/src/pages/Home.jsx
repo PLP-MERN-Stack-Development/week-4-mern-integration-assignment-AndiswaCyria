@@ -1,37 +1,51 @@
-import { useEffect, useState } from 'react';
-import { postService } from '../services/api';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function Home() {
-  const [posts, setPosts] = useState([]);
+const mockPosts = [
+  {
+    id: "1",
+    title: "Welcome to the MERN Blog",
+    category: "General",
+    excerpt: "This is your first post! Let’s build something amazing together.",
+  },
+  {
+    id: "2",
+    title: "How to Use React Hooks",
+    category: "React",
+    excerpt: "Hooks make your components more powerful and readable. Here's how...",
+  },
+];
 
-  useEffect(() => {
-    postService.getAllPosts().then(setPosts).catch(console.error);
-  }, []);
-
+const Home = () => {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">All Posts</h1>
-      <Link
-        to="/create"
-        className="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Create New Post
-      </Link>
-      <ul className="space-y-4">
-        {posts.map((post) => (
-          <li key={post._id} className="bg-white p-4 rounded shadow">
-            <h2 className="text-xl font-semibold">{post.title}</h2>
-            <p>{post.content.slice(0, 100)}...</p>
-            <Link
-              to={`/posts/${post._id}`}
-              className="text-blue-600 hover:underline"
-            >
-              Read More
-            </Link>
-          </li>
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-semibold text-gray-800">Latest Posts</h1>
+        <Link
+          to="/create"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Create New Post
+        </Link>
+      </div>
+
+      <div className="space-y-6">
+        {mockPosts.map((post) => (
+          <Link
+            to={`/posts/${post.id}`}
+            key={post.id}
+            className="block p-6 bg-white shadow-md rounded-xl border border-gray-200 hover:shadow-lg transition"
+          >
+            <h2 className="text-xl font-bold text-gray-800 mb-1">
+              {post.title}
+            </h2>
+            <p className="text-sm text-gray-500 mb-2">Category: {post.category}</p>
+            <p className="text-gray-700">{post.excerpt}</p>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
-}
+};
+
+export default Home;
